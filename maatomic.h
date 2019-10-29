@@ -8,10 +8,10 @@ namespace manch1n  //manch1n's namespace
 {
 #define RETINT(TYPE) typename std::enable_if<std::is_arithmetic<TYPE>::value,TYPE>::type 
 template <typename T>
-class ma_atomic:uncopyable
+class maatomic:uncopyable
 {
 public:
-    ma_atomic();
+    maatomic();
     RETINT(T) load();           //return current 
     RETINT(T) store(T other);    //return old
 
@@ -24,18 +24,18 @@ private:
 };
 
 template <typename T>
-ma_atomic<T>::ma_atomic():_num()
+maatomic<T>::maatomic():_num()
 {}
 
 template <typename T>
-RETINT(T) ma_atomic<T>::load()
+RETINT(T) maatomic<T>::load()
 {
     mamutexLockGuard lock(_mamutex);
     return _num;
 }
 
 template <typename T>
-RETINT(T) ma_atomic<T>::store(T newval)
+RETINT(T) maatomic<T>::store(T newval)
 {
     mamutexLockGuard lock(_mamutex);
     T oldval;
@@ -45,7 +45,7 @@ RETINT(T) ma_atomic<T>::store(T newval)
 }
 
 template <typename T>
-RETINT(T) ma_atomic<T>::operator++(int)
+RETINT(T) maatomic<T>::operator++(int)
 {
     mamutexLockGuard lock(_mamutex);
     _num++;
@@ -53,7 +53,7 @@ RETINT(T) ma_atomic<T>::operator++(int)
 }
 
 template <typename T>
-RETINT(T) ma_atomic<T>::operator--(int)
+RETINT(T) maatomic<T>::operator--(int)
 {
     mamutexLockGuard lock(_mamutex);
     _num--;
@@ -61,7 +61,7 @@ RETINT(T) ma_atomic<T>::operator--(int)
 }
 
 template <typename T>
-typename std::enable_if<std::is_arithmetic<T>::value,bool>::type ma_atomic<T>::ifZero()
+typename std::enable_if<std::is_arithmetic<T>::value,bool>::type maatomic<T>::ifZero()
 {
     mamutexLockGuard lock(_mamutex);
     return _num==0;

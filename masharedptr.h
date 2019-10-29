@@ -46,14 +46,14 @@ public:
 
 private:
     void test(); //test the refernce .if zero then deconstruct.
-    ma_atomic<int> *_reference;
+    maatomic<int> *_reference;
     T *_ptr;
 };
 
 template <typename T>
 mashared_ptr<T>::mashared_ptr(T *ptr) : _ptr(ptr)
 {
-    _reference = new ma_atomic<int>;
+    _reference = new maatomic<int>;
     _reference->store(1);
 }
 
@@ -67,7 +67,7 @@ template <typename T>
 template <class Y>
 mashared_ptr<T>::mashared_ptr(Y *ptr)
 {
-    _reference = new ma_atomic<int>;
+    _reference = new maatomic<int>;
     _reference->store(1);
     _ptr = ptr; //this assignment should be explict supported.
 }
