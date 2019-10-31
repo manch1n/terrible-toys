@@ -18,6 +18,14 @@ private:
     const uncopyable& operator=(const uncopyable&);
 };
 
+class task
+{
+public:
+    virtual void execute()=0;
+};
+
+
+
 }
 
 #endif

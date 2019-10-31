@@ -1,56 +1,38 @@
-#include "masharedptr.h"
 #include <iostream>
 #include <iomanip>
-#include <thread>
-using namespace manch1n;
+#include <unistd.h>
+#include "mathreadpool.h"
 using namespace std;
-class base
+using namespace manch1n;
+
+class drive1:public manch1n::task
 {
 public:
-    virtual void print()
+    virtual void execute() override
     {
-        cout << "base.test failed.\n";
+        cout<<s<<endl;
     }
+    string s="drive1";
 };
 
-class drive : public base
+class drive2:public manch1n::task
 {
 public:
-    virtual void print() override
+    virtual void execute() override
     {
-        cout << "this is a virtual function drived class.test success!\n";
+        cout<<s<<endl;
     }
+    string s="drive2";
 };
 
 int main(int argc, char **argv)
 {
-    cout << "test ptr accept a drived class raw pointer" << endl;
-    mashared_ptr<base> ptr(new drive);
-
-    cout<<"test in multi thread env."<<endl;
-    mashared_ptr<int> intptr(new int(111));
-    thread t1([&]() {
-        for (int i = 0; i < 100; ++i)
-        {
-            auto tmpptr(intptr);
-        }
-    });
-    t1.detach();
-    thread t2([&]() {
-        for (int i = 0; i < 100; ++i)
-        {
-            auto tmpptr(intptr);
-        }
-    });
-    t2.detach();
-    if(intptr.count()==1)
-    {
-        cout<<"multi thread test success!"<<endl;
-    }
-    else
-    {
-        cout<<"multithread test failed"<<endl;
-    }
-    
+    taskSPtr d1=make_shared<drive1>();
+    taskSPtr d2=make_shared<drive2>();
+    mathreadpool pool(4);
+    pool.initAndRun();
+    pool.pushTask(d1);
+    pool.pushTask(d2);
+    ::pause();
     return 0;
 }
