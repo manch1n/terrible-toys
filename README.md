@@ -4,9 +4,9 @@
 
 ## mamutex.h
 
-​	**Description:**
+​	**Description**:
 
-​		Class mamutex encasulates a pthread_mutex_t and provides lock and unlock methods.It is yet uncopyable.     
+​		Class **`mamutex`** encasulates a pthread_mutex_t and provides lock and unlock methods.It is yet uncopyable.     
 
 ​		Class **`mamutexLockGuard`** accept a mamutex reference which helps the customer get rid of lock and forget to unlock trouble by simply usage: `mamutexLockGuard lock(mutex)`.    
 
@@ -22,11 +22,16 @@
 
 ​		After i read ***effectiveC++*** clause45,i have an inpulse to write a **`mashared_ptr`** class which supports drived class raw pointer to implictly transforms into base class mashared_ptr.  
 
-​		I think this class has some intential risk so that I test hundreds of construct and deconstruct in multi-threads enviornment.Eventually glad that it performs right.BUT some doubts still exists:What if a shared object enter the deconstruct function but yet its reference has been minus one meanwhile other class enter the construct function and make reference add one.It's rediculous and terrible.
+​		I think this class has some protential risk so that I test hundreds of construct and deconstruct in multi-threads enviornment.Eventually glad that it performs right.BUT some doubts still exists:What if a shared object enter the deconstruct function but yet its reference has been minus one meanwhile other class enter the construct function and make reference add one.It's rediculous and terrible.A solution is make test zero and delete underlying data as a atomic operation but problem still exists.
 
+## mavector.h
 
+​	**Description: **
 
+​		Review the basic concept of c++.
 
+## mathreadpool.h
 
+​	**Description:**
 
-
+​		After reading the *The C++ Standard Library* the part of concurrency,i write a threadpool by only STL composition  including `mutex condition_variable thread`.I think it is more concise than pthread in Linux.However,Spurious wakeup in condition_variable makes me confused.
