@@ -2,12 +2,13 @@
 
 namespace manch1n
 {
-mathreadpool::mathreadpool(size_t nthreads) : _nthreads(nthreads)
+mathreadpool::mathreadpool(size_t nthreads) : _nthreads(nthreads),_run(false)
 {
 }
 
 void mathreadpool::initAndRun()
 {
+    _run=true;
     for (int i = 0; i < _nthreads; ++i)
     {
         std::thread t(routine, this);
@@ -19,35 +20,41 @@ void mathreadpool::initAndRun()
 void *mathreadpool::routine(void *arg)
 {
     mathreadpool &pool = *static_cast<mathreadpool *>(arg);
-    while (1)
+    while (pool._run)
     {
-        taskSPtr ptask = pool.popTask();
-        ptask->execute();
+        matask ptask = pool.popTask();
+        auto& [func,arg]=ptask;
+        func(arg);
     }
     return NULL;
 }
 
-void mathreadpool::pushTask(taskSPtr &t)
+void mathreadpool::pushTask(matask &t)
 {
     {
         lockGuard lock(_mutex);
-        _tasks.push(t);
+        _matasks.push(t);
     }
     _condition.notify_one();
 }
 
-taskSPtr mathreadpool::popTask()
+matask mathreadpool::popTask()
 {
     uniqueLock lock(_mutex);
     _condition.wait(lock,[this](){return !this->isEmpty();});
-    taskSPtr p(_tasks.front());
-    _tasks.pop();
+    matask p(_matasks.front());
+    _matasks.pop();
     return p;
 }
 
 bool mathreadpool::isEmpty()
 {
-    return _tasks.empty();
+    return _matasks.empty();
+}
+
+void mathreadpool::stop()
+{
+    _run=false;
 }
 
 } // namespace manch1n

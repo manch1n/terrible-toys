@@ -26,7 +26,7 @@
 
 ## mavector.h
 
-​	**Description: **
+​	**Description:**
 
 ​		Review the basic concept of c++.
 
@@ -34,4 +34,4 @@
 
 ​	**Description:**
 
-​		After reading the *The C++ Standard Library* the part of concurrency,i write a threadpool by only STL composition  including `mutex condition_variable thread`.I think it is more concise than pthread in Linux.However,Spurious wakeup in condition_variable makes me confused.
+​		After reading the ***The C++ Standard Library*** the part of concurrency,i write a threadpool by only STL composition  including `mutex condition_variable thread`.I think it is more concise than pthread in Linux.However,Spurious wakeup in condition_variable makes me confused.
